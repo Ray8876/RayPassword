@@ -1,19 +1,28 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:raypassword/page/add/addPage.dart';
+import 'package:raypassword/page/list/homeList.dart';
 
 void main() {
   runApp(MyApp());
+  // if (Platform.isAndroid) {
+  //   SystemUiOverlayStyle style = SystemUiOverlayStyle(
+  //       statusBarColor: Colors.transparent,
+  //       statusBarIconBrightness: Brightness.dark
+  //   );
+  //   SystemChrome.setSystemUIOverlayStyle(style);
+  // }
 }
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      debugShowCheckedModeBanner: false,
+      title: 'RayPassword',
+      home: MyHomePage(title: ''),
     );
   }
 }
@@ -27,40 +36,43 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
-
+    //单独设置某个页面的状态栏颜色
+    // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
+      appBar:AppBar(
+        backgroundColor: Colors.white,
+        leading: IconButton(
+          icon: Icon(Icons.add,color: Colors.black,),
+          onPressed: () {
+            //todo: open add page to chose dir or password
+            Navigator.of(context).push(
+                PageRouteBuilder(
+                    opaque:false,
+                    pageBuilder: (context, animation, secondaryAnimation) {
+                      return AddPage();
+                    }
+                ));
+          },
+        ),
+        actions: [
+          IconButton(
+              icon: Icon(Icons.find_in_page_outlined,color: Colors.black,),
+              onPressed: (){
+                //todo: 过滤页面中包含该关键字的 “password”
+              },
+          )
+        ],
+        title: Text(
+            "RayPassword",
+          style: TextStyle(color: Colors.black),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      body: SafeArea(
+        child: HomeList(),
+      ),
     );
   }
 }
