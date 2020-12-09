@@ -1,9 +1,9 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:raypassword/page/add/addPage.dart';
+import 'package:raypassword/page/animation/FadeRoute.dart';
 import 'package:raypassword/page/list/homeList.dart';
+
 
 void main() {
   runApp(MyApp());
@@ -37,24 +37,21 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
 
+
+
   @override
   Widget build(BuildContext context) {
     //单独设置某个页面的状态栏颜色
     // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
+
     return Scaffold(
       appBar:AppBar(
         backgroundColor: Colors.white,
         leading: IconButton(
-          icon: Icon(Icons.add,color: Colors.black,),
+          icon: Hero(tag: "addIcon",child: Icon(Icons.add,color: Colors.black,),),
           onPressed: () {
-            //todo: open add page to chose dir or password
-            Navigator.of(context).push(
-                PageRouteBuilder(
-                    opaque:false,
-                    pageBuilder: (context, animation, secondaryAnimation) {
-                      return AddPage();
-                    }
-                ));
+            /// 选择新增文件夹、新增记录
+            Navigator.of(context).push(FadeRoute(AddPage()));
           },
         ),
         actions: [

@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class HomeListOne extends StatefulWidget {
+  final int isDir;
   final String title;
   final String username;
   final String password;
@@ -13,6 +14,7 @@ class HomeListOne extends StatefulWidget {
     this.username,
     this.password,
     this.remarks,
+    this.isDir,
   }) : super(key: key);
 
   @override
@@ -35,36 +37,43 @@ class _HomeListOneState extends State<HomeListOne> {
             // borderRadius: BorderRadius.all(Radius.circular(5.0)),
             // border: new Border.all(width: 1, color: Colors.blueGrey[50]),
           ),
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "  title",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 22,
+          child: widget.isDir == 1
+              ? Row(
+                  children: [
+                    Icon(Icons.folder_open_rounded),
+                    Text(widget.title??"")
+                  ],
+                )
+              : Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "  title",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 22,
+                          ),
+                        ),
+                        Text(
+                          "remarks",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                  Text(
-                    "remarks",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text("username"),
-                  Text("password"),
-                ],
-              )
-            ],
-          ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text("username"),
+                        Text("password"),
+                      ],
+                    )
+                  ],
+                ),
         ),
       ),
     );
