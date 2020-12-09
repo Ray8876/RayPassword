@@ -1,5 +1,5 @@
 class GlobalData {
-  int nowPage = 0;
+  int nowPage = -1;
   factory GlobalData() => _getInstance();
   static GlobalData get instance => _getInstance();
   static GlobalData _instance;

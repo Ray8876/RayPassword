@@ -20,8 +20,6 @@ class _AddDirState extends State<AddDir> {
 
   void saveDir(){
     dirNameFocusNode.unfocus();
-    ///GlobalData 共享数据调用方法
-    int faId = GlobalData.instance.nowPage;
 
     if((dirName??"").isEmpty){
       Fluttertoast.showToast(
@@ -36,7 +34,7 @@ class _AddDirState extends State<AddDir> {
       return;
     }
 
-    db.getSameDir(dirName,faId).then((v) {
+    db.getSameDir(dirName,GlobalData.instance.nowPage).then((v) {
       if(v){
         Fluttertoast.showToast(
             msg: "已存在同名文件夹",
@@ -51,7 +49,7 @@ class _AddDirState extends State<AddDir> {
         db.savePassword(new Password(
           isDir: 1,
           title: dirName,
-          fatherId: faId,
+          fatherId: GlobalData.instance.nowPage,
         )).then((value) {
           Fluttertoast.showToast(
               msg: "添加成功",

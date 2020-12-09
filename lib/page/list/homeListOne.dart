@@ -2,11 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class HomeListOne extends StatefulWidget {
+  final int id;
   final int isDir;
   final String title;
   final String username;
   final String password;
   final String remarks;
+  final int fatherId;
 
   HomeListOne({
     Key key,
@@ -15,6 +17,8 @@ class HomeListOne extends StatefulWidget {
     this.password,
     this.remarks,
     this.isDir,
+    this.id,
+    this.fatherId,
   }) : super(key: key);
 
   @override
@@ -40,8 +44,9 @@ class _HomeListOneState extends State<HomeListOne> {
           child: widget.isDir == 1
               ? Row(
                   children: [
-                    Icon(Icons.folder_open_rounded),
-                    Text(widget.title??"")
+                    Icon(Icons.folder_open_rounded,size: 30,),
+                    Text("   " + widget.title??"",
+                    style: TextStyle(fontSize: 20),)
                   ],
                 )
               : Column(
@@ -50,14 +55,14 @@ class _HomeListOneState extends State<HomeListOne> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          "  title",
+                          widget.title,
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 22,
                           ),
                         ),
                         Text(
-                          "remarks",
+                          widget.remarks,
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 18,
@@ -68,8 +73,8 @@ class _HomeListOneState extends State<HomeListOne> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text("username"),
-                        Text("password"),
+                        Text(widget.username),
+                        Text(widget.password),
                       ],
                     )
                   ],

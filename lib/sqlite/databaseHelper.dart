@@ -77,6 +77,30 @@ class DatabaseHelper{
     return result.toList();
   }
 
+  Future<int> getLastDirId(int nowId) async {
+    var dbClient = await db;
+    var result = await dbClient.query(passwordTable,
+        columns: [columnId, isDir, title, username, password ,remarks, fatherId],
+        where: "$columnId = ?",
+        whereArgs: [nowId],
+    );
+    if (result.length > 0) {
+      return Password.fromMap(result.first).fatherId;
+    }
+    return -1;
+  }
+
+  Future<List> getAllPasswordInDir(int _fatherId) async {
+    var dbClient = await db;
+    var result = await dbClient.query(passwordTable,
+        columns: [columnId, isDir, title, username, password ,remarks, fatherId],
+        where: "$fatherId = ?",
+        whereArgs: [_fatherId],
+        orderBy: isDir + " desc, " + title
+    );
+    return result.toList();
+  }
+
   Future<int> getCount() async {
     var dbClient = await db;
     return Sqflite.firstIntValue(await dbClient.rawQuery(
