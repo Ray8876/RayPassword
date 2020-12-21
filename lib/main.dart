@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:raypassword/page/add/addPage.dart';
 import 'package:raypassword/page/animation/FadeRoute.dart';
 import 'package:raypassword/page/list/homeList.dart';
+import 'package:raypassword/page/setting/setting.dart';
 
 
 void main() {
@@ -55,9 +56,9 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
         actions: [
           IconButton(
-              icon: Icon(Icons.find_in_page_outlined,color: Colors.black,),
+              icon: Hero(tag: "settingIcon",child: Icon(Icons.settings,color: Colors.black,),),
               onPressed: (){
-                //todo: 过滤页面中包含该关键字的 “password”
+                Navigator.of(context).push(FadeRoute(Setting()));
               },
           )
         ],

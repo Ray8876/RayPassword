@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:raypassword/globalData.dart';
 import 'package:raypassword/model/password.dart';
+import 'package:raypassword/page/add/addPassword.dart';
+import 'package:raypassword/page/animation/FadeRoute.dart';
 import 'package:raypassword/page/list/homeListOne.dart';
+import 'package:raypassword/page/uniformStyle/uniDialog.dart';
 import 'package:raypassword/sqlite/databaseHelper.dart';
 
 class HomeList extends StatefulWidget {
@@ -24,6 +27,17 @@ class _HomeListState extends State<HomeList> {
     getList();
   }
 
+  void confirmDelete(int id){
+    UniDialog().show(context,
+        '确定要删除?（不可恢复！）',
+        "取消", "确定").then((value) {
+      if(value == 1){
+        db.deletePassword(id);
+        setState(() {});
+      }
+    });
+  }
+
   void getLastDir() {
     db.getLastDirId(GlobalData.instance.nowPage).then((value) {
       GlobalData.instance.nowPage = value;
@@ -32,9 +46,12 @@ class _HomeListState extends State<HomeList> {
   }
 
   void getNextDir(int id) {
-    print("nextID:" + id.toString() );
     GlobalData.instance.nowPage = id;
     getList();
+  }
+
+  void editPassword(int id) {
+    Navigator.of(context).push(FadeRoute(AddPassword(id: id,)));
   }
 
   Future<void> getList() async {
@@ -68,7 +85,12 @@ class _HomeListState extends State<HomeList> {
         onTap: (){
           if (temp.isDir == 1){
             getNextDir(temp.id);
+          }else{
+            editPassword(temp.id);
           }
+        },
+        onLongPress: (){
+          confirmDelete(temp.id);
         },
         child: HomeListOne(
           id: temp.id,
@@ -100,4 +122,5 @@ class _HomeListState extends State<HomeList> {
           }), // scroll view
     );
   }
+
 }

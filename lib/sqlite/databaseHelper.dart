@@ -70,6 +70,14 @@ class DatabaseHelper{
     return result;
   }
 
+  Future<int> updatePassword(Password psw) async {
+    var dbClient = await db;
+    var result = await dbClient.update(passwordTable, psw.toMap(),
+    where: "$columnId = ?",
+    whereArgs: [psw.id]);
+    return result;
+  }
+
   Future<List> getAllPassword() async {
     var dbClient = await db;
     var result = await dbClient.query(passwordTable,
@@ -119,12 +127,12 @@ class DatabaseHelper{
     return false;
   }
 
-  Future<bool> getSamePassword(String _title,int _fatherId) async{
+  Future<bool> getSamePassword(int _id,String _title,int _fatherId) async{
     var dbClient = await db;
     List<Map> result = await dbClient.query(passwordTable,
         columns: [columnId, isDir, title, username, password ,remarks, fatherId],
-        where: "$isDir = 0 and $title = ? and $fatherId = ?",
-        whereArgs: [_title, _fatherId]);
+        where: "$isDir = 0 and $title = ? and $fatherId = ?" + (_id != -1 ?" and $columnId <> ?" : "")  ,
+        whereArgs: [_title, _fatherId, _id]);
     if (result.length > 0) {
       return true;
     }
@@ -144,9 +152,9 @@ class DatabaseHelper{
     return null;
   }
 
-  Future<int> deleteNote(String title) async {
+  Future<int> deletePassword(int id) async {
     var dbClient = await db;
-    return await dbClient.delete(passwordTable, where: '$title = ?', whereArgs: [title]);
+    return await dbClient.delete(passwordTable, where: '$columnId = ?', whereArgs: [id]);
   }
 
   Future<int> updateNote(Password psw) async {
