@@ -9,7 +9,6 @@ import 'package:raypassword/sqlite/databaseHelper.dart';
 
 class AddPassword extends StatefulWidget {
   final int id;
-
   const AddPassword({Key key, this.id}) : super(key: key);
 
   @override
@@ -55,8 +54,6 @@ class _AddPasswordState extends State<AddPassword> {
       return;
     }
 
-    if (widget.id == null) {
-    } else {}
     db.getSamePassword(widget.id ?? -1, newTitle, faId).then((v) {
       if (v) {
         Fluttertoast.showToast(
@@ -69,16 +66,14 @@ class _AddPasswordState extends State<AddPassword> {
             fontSize: 16.0);
       } else {
         if (widget.id == null) {
-          db
-              .savePassword(Password(
+          db.savePassword(Password(
             isDir: 0,
             title: newTitle,
             username: newUsername,
             password: newPassword,
             remarks: newRemarks,
             fatherId: faId,
-          ))
-              .then((value) {
+          )).then((value) {
             Fluttertoast.showToast(
                 msg: "添加成功",
                 toastLength: Toast.LENGTH_SHORT,
@@ -91,8 +86,7 @@ class _AddPasswordState extends State<AddPassword> {
             Navigator.pop(context);
           });
         } else {
-          db
-              .updatePassword(Password(
+          db.updatePassword(Password(
             id: widget.id,
             isDir: 0,
             title: newTitle,
@@ -100,8 +94,7 @@ class _AddPasswordState extends State<AddPassword> {
             password: newPassword,
             remarks: newRemarks,
             fatherId: faId,
-          ))
-              .then((value) {
+          )).then((value) {
             Fluttertoast.showToast(
                 msg: "修改成功",
                 toastLength: Toast.LENGTH_SHORT,
@@ -184,7 +177,7 @@ class _AddPasswordState extends State<AddPassword> {
                             Hero(
                                 tag: "PswText",
                                 child: Text(
-                                  "新增记录",
+                                  widget.id == null ? "修改记录":"新增记录",
                                   style: TextStyle(fontSize: 20, color: Colors.black54),
                                 )),
                           ],

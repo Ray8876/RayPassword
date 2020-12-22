@@ -6,6 +6,9 @@ import 'package:raypassword/page/uniformStyle/uniButton.dart';
 import 'package:raypassword/sqlite/databaseHelper.dart';
 
 class AddDir extends StatefulWidget {
+  final int id;
+  const AddDir({Key key, this.id}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() {
     return _AddDirState();
@@ -14,13 +17,28 @@ class AddDir extends StatefulWidget {
 
 class _AddDirState extends State<AddDir> {
 
+  Password oldPsw;
+
   DatabaseHelper db = new DatabaseHelper();
   String dirName = "";
+  TextEditingController dirNameController = new TextEditingController();
   FocusNode dirNameFocusNode = new FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+    if(widget.id != null){
+      db.getPassword(widget.id).then((value){
+        oldPsw = value;
+        dirNameController.text = value.title;
+        dirName = value.title;
+        setState(() { });
+      });
+    }
+  }
 
   void saveDir(){
     dirNameFocusNode.unfocus();
-
     if((dirName??"").isEmpty){
       Fluttertoast.showToast(
           msg: "文件夹名不能为空",
@@ -46,24 +64,31 @@ class _AddDirState extends State<AddDir> {
             fontSize: 16.0
         );
       }else{
-        db.savePassword(new Password(
-          isDir: 1,
-          title: dirName,
-          fatherId: GlobalData.instance.nowPage,
-        )).then((value) {
-          Fluttertoast.showToast(
-              msg: "添加成功",
-              toastLength: Toast.LENGTH_SHORT,
-              gravity: ToastGravity.BOTTOM,
-              timeInSecForIosWeb: 2,
-              backgroundColor: Colors.green[700],
-              textColor: Colors.white,
-              fontSize: 16.0
-          );
-          Navigator.pop(context);
-          Navigator.pop(context);
-        });
-
+        if(widget.id != null){
+          db.updatePassword(new Password(
+            id: oldPsw.id,
+            title: dirName,
+            fatherId: GlobalData.instance.nowPage,
+          ));
+        }else{
+          db.savePassword(new Password(
+            isDir: 1,
+            title: dirName,
+            fatherId: GlobalData.instance.nowPage,
+          )).then((value) {
+            Fluttertoast.showToast(
+                msg: "添加成功",
+                toastLength: Toast.LENGTH_SHORT,
+                gravity: ToastGravity.BOTTOM,
+                timeInSecForIosWeb: 2,
+                backgroundColor: Colors.green[700],
+                textColor: Colors.white,
+                fontSize: 16.0
+            );
+            Navigator.pop(context);
+            Navigator.pop(context);
+          });
+        }
       }
     });
   }
@@ -120,6 +145,7 @@ class _AddDirState extends State<AddDir> {
                   Container(
                     padding: EdgeInsets.fromLTRB(15, 30, 15, 0),
                     child: TextField(
+                      controller: dirNameController,
                       focusNode: dirNameFocusNode,
                         decoration: const InputDecoration(
                           hintText: '文件夹名',
